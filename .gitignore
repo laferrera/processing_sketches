@@ -2,3 +2,4 @@
 *.mov
 ndsh/
 libraries/
+.ds_store

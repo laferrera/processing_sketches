@@ -44,14 +44,12 @@ void setup() {
   //String dp=sketchPath();
   //video = new Movie(this, dp + "test.mov");
   video = new Movie(this, "balloon.mp4");  
-  //video.play();  
   video.loop();  
   
   // Todo why doesn't video load?
   //int count = video.width * video.height;
   // set global vars at top for convenience now: videoHeight / videoWidth
   int count = int(videoWidth * videoHeight / fontSize);
-
   font = loadFont("C64ProMono-10.vlw");
 
   // doubleing the letters 
