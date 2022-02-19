@@ -119,7 +119,7 @@ void draw() {
   if(curFrame % 100 == 0){println("current frame: ", curFrame);}
   
   
-  //String testString = "A";
+  // String testString = "A";
   //println("current text width: ", textWidth(testString));
   
   for (int y = 1; y < frame.width; y++) {
