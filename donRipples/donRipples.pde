@@ -12,8 +12,6 @@ float[][][] current;// = new float[cols][rows];
 float[][][] previous;// = new float[cols][rows];
 float[][] noise;
 
-// int[][] current;// = new float[cols][rows];
-// int[][] previous;// = new float[cols][rows];
 
 float dampening = .99;
 int timer;
@@ -29,6 +27,8 @@ float letterIndexScale = 1.0;
 Boolean greyScale = false;
 Boolean addInverseLetters = true;
 
+int displayMode = 0;
+
 void setup() {
   size(720, 360);
   frameRate(24);
@@ -37,9 +37,7 @@ void setup() {
   current = new float[cols][rows][3];
   previous = new float[cols][rows][3];
   noise = new float[cols][rows];
-  generate2DNoise();
-  // current = new int[cols][rows];
-  // previous = new int[cols][rows];
+  //generate2DNoise();
   oscP5 = new OscP5(this,10101);
   myRemoteLocation = new NetAddress("127.0.0.1",10102);
 
@@ -75,6 +73,7 @@ void keyPressed() {
     case 'f': fontSize *= 1.1; break;
     case 'F': fontSize *= 0.9; break;
     case 'q': { videoExport.endMovie(); exit();}
+    case 'c': {displayMode = (displayMode + 1)%3; }
   }
 }
 
@@ -164,55 +163,41 @@ void generate2DNoise(){
   }
 }
 
-// void draw() {
-//   if (millis() - timer >= 6000) {
-//     // randomRipple();
-//     timer = millis();
-//   }
-//   background(0);
-//   loadPixels();
-//   for (int i = 1; i < cols-1; i++) {
-//     for (int j = 1; j < rows-1; j++) {
-//       current[i][j] = (
-//         previous[i-1][j] + 
-//         previous[i+1][j] +
-//         previous[i][j-1] + 
-//         previous[i][j+1]) / 2 - current[i][j];
-//       current[i][j] = current[i][j] * dampening;
-//       int index = i + j * cols;
-//       pixels[index] = color(current[i][j]);
-//     }
-//   }
-//   updatePixels();
+ void rippleClassic() {
+   if (millis() - timer >= 6000) {
+     // randomRipple();
+     timer = millis();
+   }
+   background(0);
+   loadPixels();
+   for (int i = 1; i < cols-1; i++) {
+     for (int j = 1; j < rows-1; j++) {
+       current[i][j][0] = (
+         previous[i-1][j][0] + 
+         previous[i+1][j][0] +
+         previous[i][j-1][0] + 
+         previous[i][j+1][0]) / 2 - current[i][j][0];
+       current[i][j][0] = current[i][j][0] * dampening;
+       int index = i + j * cols;
+       pixels[index] = color(current[i][j][0]);
+     }
+   }
+   updatePixels();
 
-//   float[][] temp = previous;
-//   previous = current;
-//   current = temp;
-// }
-
-
-
-
-// color experiment
-void draw() {
-  //if (millis() - timer >= 2000) {
-  //  randomRipple();
-  //  timer = millis();
-  //}
-  background(0);
-  PImage frame = createImage(width, height, ARGB);
+   float[][][] temp = previous;
+   previous = current;
+   current = temp;
+ }
+ 
+void rippleColor() {
+   if (millis() - timer >= 6000) {
+     // randomRipple();
+     timer = millis();
+   }
+   background(0);
   loadPixels();
   for (int i = 1; i < cols-1; i++) {
     for (int j = 1; j < rows-1; j++) {
-
-
-      // current[i][j] = (
-      //   previous[i-1][j] + 
-      //   previous[i+1][j] +
-      //   previous[i][j-1] + 
-      //   previous[i][j+1]) * 0.5 - current[i][j];
-      // current[i][j] = current[i][j] * dampening;
-      // color currentColor = color(current[i][j]);
 
       float colorScaler = 0.5;
       float noiseScale = 0.08;
@@ -244,10 +229,63 @@ void draw() {
       current[i][j][2] = currentBlue;
       
       color currentColor = color(currentRed, currentGreen, currentBlue);
-      // int currentColor = 0xff000000 | (currentRed << 16) | (currentGreen << 8) | currentBlue;
       
-      // current[i][j] = [currentRed, currentGreen, currentBlue];
+      int index = i + j * cols;
+      pixels[index] = currentColor;
+    }
+  }
+  updatePixels();
 
+  float[][][] temp = previous;
+  previous = current;
+  current = temp;
+ }
+ 
+ 
+
+// color experiment
+void coloAsciiRipples() {
+  //if (millis() - timer >= 2000) {
+  //  randomRipple();
+  //  timer = millis();
+  //}
+  background(0);
+  PImage frame = createImage(width, height, ARGB);
+  loadPixels();
+  for (int i = 1; i < cols-1; i++) {
+    for (int j = 1; j < rows-1; j++) {
+
+      float colorScaler = 0.5;
+      float noiseScale = 0.08;
+      float currentRed = (
+        previous[i-1][j][0] + 
+        previous[i+1][j][0] +
+        previous[i][j-1][0] + 
+        previous[i][j+1][0]) * colorScaler - current[i][j][0];
+      currentRed = currentRed * dampening;
+      currentRed = currentRed - noiseScale * noise[i][j];
+      current[i][j][0] = currentRed;
+
+     float currentGreen = (
+        previous[i-1][j][1] + 
+        previous[i+1][j][1] +
+        previous[i][j-1][1] + 
+        previous[i][j+1][1]) * colorScaler - current[i][j][1];
+      currentGreen = currentGreen * dampening;
+      currentGreen = currentGreen - noiseScale * noise[i][j];
+      current[i][j][1] = currentGreen;
+
+      float currentBlue = (
+        previous[i-1][j][2] + 
+        previous[i+1][j][2] +
+        previous[i][j-1][2] + 
+        previous[i][j+1][2]) * colorScaler - current[i][j][2];
+      currentBlue = currentBlue * dampening;
+      currentBlue = currentBlue - noiseScale * noise[i][j];
+      current[i][j][2] = currentBlue;
+      
+      color currentColor = color(currentRed, currentGreen, currentBlue);
+      
       int index = i + j * cols;
       frame.pixels[index] = currentColor;
       pixels[index] = currentColor;
@@ -262,16 +300,15 @@ void draw() {
   current = temp;
 
 
-  frame.resize(int(width/fontSize), int(height / fontSize));
+  frame.resize(int(width/ fontSize), int(height / fontSize));
   background(0);
-    // updatePixels();
   pushMatrix();
   int index = 0;
- for (int y = 1; y < frame.width; y++) {
+  for (int y = 1; y < frame.height; y++) {
     // Move down for next line
     translate(0, fontSize);
     pushMatrix();
-    for (int x = 0; x < frame.height; x++) {
+    for (int x = 0; x < frame.width; x++) {
 
       int pixelColor = frame.pixels[index];
       // Faster method of calculating r, g, b than red(), green(), blue() 
@@ -311,4 +348,11 @@ void draw() {
   }
   popMatrix();
   // videoExport.saveFrame();
+}
+
+
+void draw(){
+  if(displayMode == 0) {rippleClassic();}
+  if(displayMode == 1) {rippleColor();}
+  if(displayMode == 2) {coloAsciiRipples();}
 }
