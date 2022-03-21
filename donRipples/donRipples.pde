@@ -1,3 +1,4 @@
+import org.monome.Monome;
 import oscP5.*;
 import netP5.*;
 import processing.video.*;
@@ -37,7 +38,7 @@ void setup() {
   current = new float[cols][rows][3];
   previous = new float[cols][rows][3];
   noise = new float[cols][rows];
-  //generate2DNoise();
+  generate2DNoise();
   oscP5 = new OscP5(this,10101);
   myRemoteLocation = new NetAddress("127.0.0.1",10102);
 
