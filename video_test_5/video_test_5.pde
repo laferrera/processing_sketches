@@ -13,10 +13,10 @@ boolean cheatScreen;
 //String letterOrder = " .`-_':,;^=+/\"|)\\<>)iv%xclrs{*}I?!][1taeo7zjLunT#JCwfy325Fp6mqSghVd4EgXPGZbYkOA&8U$@KHDBWNMR0Q";
 //String letterOrder = "Q0RMNWBDHK@$U8&AOkYbZGPXgE4dVhgSqm6pF523yfwCJ#TnuLjz7oeat1[]!?I}*{srlcx%vi)><\\)|\"/+=^;," ;
 
-//String letterOrder = "█▓▒░▀▀▄▒░¬!?)><\\)|\"/+=^;,:'_-`. ";
+//String letterOrder = "█▓▒░▀▀▄▒░Aa4¬!?)><\\)|\"/+=^  aA4;,:'_-`. ";
 
-//String letterOrder = "▓▒░◿◺◹◸◡◠◟◞◝◜◗◖▱▰▯▮▭▬▫▪▩╬╫╪╩╨╧╦╥╤╣╢╡╠╟╞╝╜╛╚╙╘╗╖╕╔╓╒║═▟▞▝▜▛▚▙▘▗▖█▇▆▅▄▃▂▁▀▀▄█░¬!?=`*+◠◜_⋰░▃▂▁/;:.⨯⨉✖✕×   ";
-String letterOrder = "  .`-_':/;▁▂▃░⋰_◜◠+*`=?!¬░█▄▀▀▁▂▃▄▅▆▇█▖▗▘▙▚▛▜▝▞▟═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬▩▪▫▬▭▮▯▰▱◖◗◜◝◞◟◠◡◸◹◺◿░▒▓";
+String letterOrder = "▓▒░◿◺◹◸◡◠◟◞◝◜◗◖▱▰▯▮▭▬▫▪▩╬╫╪╩╨╧╦╥╤╣╢╡╠╟╞╝╜╛╚╙╘╗╖╕╔╓╒║═▟▞▝▜▛▚▙▘▗▖█▇▆▅▄▃▂▁▀▀▄█░¬!?=`*+◠◜_⋰░▃▂▁/;:.⨯⨉✖✕×   ";
+//String letterOrder = "  .`-_':/;▁▂▃░⋰_◜◠+*`=?!¬░█▄▀▀▁▂▃▄▅▆▇█▖▗▘▙▚▛▜▝▞▟═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬▩▪▫▬▭▮▯▰▱◖◗◜◝◞◟◠◡◸◹◺◿░▒▓";
 
 char[] letters;
 
@@ -25,25 +25,26 @@ char[] chars;
 
 PFont font;
 
-float fontSize = 12.0;
+//float fontSize = 18.0;
+float fontSize = 9.0;
 float brightDamp = 0.1;
 float pixelOffset = 1.0;
 float letterIndexScale = 0.8;
-Boolean greyScale = true;
+Boolean greyScale = false;
 Boolean addInverseLetters = true;
 
-int videoWidth = 720;
-int videoHeight = 720;
+int videoWidth = 1080;
+int videoHeight = 1080;
 int curFrame = 0;
  
 
 void setup() {
-  size(720, 720);
+  size(1080, 1080);
 
   //TODO: Make this relative for parent directory
   //String dp=sketchPath();
   //video = new Movie(this, dp + "test.mov");
-  video = new Movie(this, "balloon.mp4");  
+  video = new Movie(this, "orbs1.mp4");  
   video.loop();  
   
   // Todo why doesn't video load?
