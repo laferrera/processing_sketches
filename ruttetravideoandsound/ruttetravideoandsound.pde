@@ -6,8 +6,9 @@
 
 //Libraries
 import processing.video.*;
-//Capture video;                     
-Movie movie;                        
+Capture video;                     
+Movie movie;          
+PImage frame;
 
 import controlP5.*;
 ControlP5 cp5;
@@ -38,7 +39,7 @@ int musicMode = 1;
 // 0 -> No Music
 // 1 -> Sound File
 // 2 -> Microphone
-int imageMode = 1;
+int imageMode = 2;
 // 0 -> Image File
 // 1 -> Video File
 // 2 -> Camera
@@ -83,7 +84,7 @@ void setup() {
 
   size(720, 720, P3D);
   pgr = createGraphics(640, 480, P3D);
-  smooth();
+  //smooth();
 
   // Working with external cámeras
   String[] cameras = Capture.list();            
@@ -95,10 +96,10 @@ void setup() {
   img = loadImage(name + "." + type);         
 
   // Working with Camera
-  //video = new Capture(this, cameras[0]);
-  //if (imageMode==2) {
-  //  video.start();
-  //}
+  video = new Capture(this, cameras[0]);
+  if (imageMode==2) {
+    video.start();
+  }
   
   // Working with video file
   movie = new Movie(this, "a-letter.mp4");
@@ -219,13 +220,7 @@ void draw() {
     background(0);
     movie.loadPixels();
     image(movie,0,0,1,1);
-    if(curFrame % 100 == 0){
-      println("current frame: ", curFrame);
-      c = movie.width * movie.height / 2;
-      col = movie.pixels[c];
-      println("color at pixel: ", c, col); 
-    }
-    PImage frame = createImage(movie.width, movie.height, ARGB);
+    frame = createImage(movie.width, movie.height, ARGB);
     frame.pixels = movie.pixels;
     frame.resize(720,720);
     translate(translatex, translatey);
@@ -244,27 +239,32 @@ void draw() {
     
     popMatrix();
     break;
-  //case 2:
-  //  if (video.available()) {
-  //    video.read();                                             // reads and updates video file pixels
-  //    video.loadPixels();
-  //    pushMatrix();
-  //    translate(translatex, translatey);
-  //    for (int i = 0; i < video.width; i+=space) {            // You can change video. to img. or movie.
-  //      beginShape();
-  //      for (int j = 0; j < video.height; j+=space) {
-  //        c = i+(j*video.width);
-  //        col = video.pixels[c];
-  //        stroke(red(col), green(col), blue(col), 255);
-  //        strokeWeight(weight);
-  //        noFill();
-  //        vertex (i, j, (depthZ * brightness(col))-zoom);
-  //      }
-  //      endShape();
-  //    }
-  //    popMatrix();
-  //  }
-  //  break;
+  case 2:
+    if (video.available()) {
+      pushMatrix();
+      background(0);
+      video.read();                                             // reads and updates video file pixels
+      video.loadPixels();
+      image(video,0,0,1,1);
+      frame = createImage(video.width, video.height, ARGB);
+      frame.pixels = video.pixels;
+      frame.resize(720,720);
+      translate(translatex, translatey);
+      for (int i = 0; i < frame.width; i+=space) {            // You can change video. to img. or movie.
+        beginShape();
+        for (int j = 0; j < frame.height; j+=space) {
+          c = i+(j*frame.width);
+          col = frame.pixels[c];
+          stroke(red(col), green(col), blue(col), 255);
+          strokeWeight(weight);
+          noFill();
+          vertex (i, j, (depthZ * brightness(col))-zoom);
+        }
+      endShape();
+      }
+    
+      popMatrix();
+    }
   }
   // Sends spout graphics
   //spout.sendTexture();
