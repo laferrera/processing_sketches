@@ -84,7 +84,7 @@ void setup() {
 
   size(720, 720, P3D);
   pgr = createGraphics(640, 480, P3D);
-  //smooth();
+  smooth();
 
   // Working with external cámeras
   String[] cameras = Capture.list();            
@@ -108,8 +108,8 @@ void setup() {
   // Depth control slider
   cp5 = new ControlP5(this);
   cp5.addSlider("depth")
-    .setRange(0.0, 1)
-    .setValue(0.0)
+    .setRange(0.0, 2.0)
+    .setValue(0.1)
     .setPosition(20, height-30)
     .setSize(100, 10)
     ;
@@ -253,14 +253,14 @@ void draw() {
       for (int i = 0; i < frame.width; i+=space) {            // You can change video. to img. or movie.
         beginShape();
         for (int j = 0; j < frame.height; j+=space) {
-          c = i+(j*frame.width);
+          c = j+(i*frame.width);
           col = frame.pixels[c];
           stroke(red(col), green(col), blue(col), 255);
           strokeWeight(weight);
           noFill();
-          vertex (i, j, (depthZ * brightness(col))-zoom);
+          vertex (j, i, (depthZ * brightness(col))-zoom);
         }
-      endShape();
+        endShape();
       }
     
       popMatrix();
